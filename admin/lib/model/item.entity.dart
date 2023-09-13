@@ -6,9 +6,9 @@ class Item {
   @Id()
   int id = 0;
 
-  final String name;
-  final String alsoCalled;
-  final String partUsed;
+  String name;
+  String alsoCalled;
+  String partUsed;
 
   Item(this.name, this.alsoCalled, this.partUsed);
 }

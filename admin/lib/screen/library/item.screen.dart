@@ -54,17 +54,27 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(
                   height: 60,
                   width: 300,
-                  child: TextField(controller: namecontroller),
+                  child: TextField(
+                      controller: namecontroller,
+                      decoration: InputDecoration(
+                      hintText: 'Name of item'),
+                  ),
                 ),
                 SizedBox(
                   height: 60,
                   width: 300,
-                  child: TextField(controller: alsoCalledcontroller),
+                  child: TextField(controller: alsoCalledcontroller,
+                    decoration: InputDecoration(
+                        hintText: 'Alternative Name'),
+                  ),
                 ),
             SizedBox(
               height: 60,
               width: 300,
-              child: TextField(controller: partUsedController),
+              child: TextField(controller: partUsedController,
+                decoration: InputDecoration(
+                    hintText: 'Part Used'),
+              ),
             ),
                 ElevatedButton(
                   onPressed: addToList,
@@ -73,6 +83,63 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
+        );
+      },
+    );
+  }
+  void showItemDetailsDialog(BuildContext context, Item item) {
+    final TextEditingController nameController = TextEditingController(text: item.name);
+    final TextEditingController alsoCalledController = TextEditingController(text: item.alsoCalled);
+    final TextEditingController partUsedController = TextEditingController(text: item.partUsed);
+
+    showDialog(
+      context: context,
+      builder: (_) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Text('Edit Item Details'),
+              content: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(
+                    controller: nameController,
+                    decoration: InputDecoration(labelText: 'Name'),
+                  ),
+                  TextField(
+                    controller: alsoCalledController,
+                    decoration: InputDecoration(labelText: 'Also Called'),
+                  ),
+                  TextField(
+                    controller: partUsedController,
+                    decoration: InputDecoration(labelText: 'Part Used'),
+                  ),
+                ],
+              ),
+              actions: [
+                ElevatedButton(
+                  onPressed: () {
+                    // Update item values
+                    item.name = nameController.text;
+                    item.alsoCalled = alsoCalledController.text;
+                    item.partUsed = partUsedController.text;
+
+                    // Update item in the database
+                    store.box<Item>().put(item);
+
+                    // Close the dialog
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Save'),
+                ),
+                ElevatedButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Close'),
+                ),
+              ],
+            );
+          },
         );
       },
     );
@@ -91,18 +158,24 @@ class _HomePageState extends State<HomePage> {
         stream: stream,
         initialData: const <Item>[],
         builder: (_, snapshot) {
-          return ListView(
-            children: snapshot.data!.map((item) {
-              return Card(
-                child: ListTile(
-                  title: Text(item.name),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () => removeSelectedItem(item),
+          final items = snapshot.data ?? [];
+          return ListView.builder(
+            itemCount: items.length,
+            itemBuilder: (context, index) {
+              final item = items[index];
+              return GestureDetector(
+                onTap: () => showItemDetailsDialog(context,item), // Show details dialog when tapped
+                child: Card(
+                  child: ListTile(
+                    title: Text(item.name),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.delete),
+                      onPressed: () => removeSelectedItem(item),
+                    ),
                   ),
                 ),
               );
-            }).toList(),
+            },
           );
         },
       ),
