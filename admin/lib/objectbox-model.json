@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "2:1903011254579719916",
-      "lastPropertyId": "3:4477253838581226508",
+      "lastPropertyId": "4:5763331632012494661",
       "name": "Item",
       "flags": 2,
       "properties": [
@@ -23,6 +23,11 @@
         {
           "id": "3:4477253838581226508",
           "name": "alsoCalled",
+          "type": 9
+        },
+        {
+          "id": "4:5763331632012494661",
+          "name": "partUsed",
           "type": 9
         }
       ],

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'main.dart';
-import 'item.entity.dart';
+import '../../main.dart';
+import '../../model/item.entity.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -12,11 +12,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late final TextEditingController namecontroller;
   late final TextEditingController alsoCalledcontroller;
+  late final TextEditingController partUsedController;
 
   @override
   void initState() {
     namecontroller = TextEditingController();
     alsoCalledcontroller = TextEditingController();
+    partUsedController = TextEditingController();
     super.initState();
   }
 
@@ -24,13 +26,15 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     namecontroller.dispose();
     alsoCalledcontroller.dispose();
+    partUsedController.dispose();
     super.dispose();
   }
 
   void addToList() {
-    store.box<Item>().put(Item(namecontroller.text,alsoCalledcontroller.text));
+    store.box<Item>().put(Item(namecontroller.text,alsoCalledcontroller.text,partUsedController.text));
     namecontroller.text = '';
     alsoCalledcontroller.text = '';
+    partUsedController.text = '';
     Navigator.pop(context);
   }
 
@@ -57,6 +61,11 @@ class _HomePageState extends State<HomePage> {
                   width: 300,
                   child: TextField(controller: alsoCalledcontroller),
                 ),
+            SizedBox(
+              height: 60,
+              width: 300,
+              child: TextField(controller: partUsedController),
+            ),
                 ElevatedButton(
                   onPressed: addToList,
                   child: const Text('add'),
