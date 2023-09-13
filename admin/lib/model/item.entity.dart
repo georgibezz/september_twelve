@@ -1,6 +1,6 @@
 import 'package:objectbox/objectbox.dart';
 
-@Sync()
+@Sync() //important
 @Entity()
 class Item {
   @Id()
@@ -8,6 +8,7 @@ class Item {
 
   final String name;
   final String alsoCalled;
+  final String partUsed;
 
-  Item(this.name, this.alsoCalled);
+  Item(this.name, this.alsoCalled, this.partUsed);
 }

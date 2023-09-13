@@ -1,7 +1,8 @@
 import 'dart:io';
-import 'package:flutter/material.dart';
-import 'home.screen.dart';
 import 'package:admin/objectbox.g.dart';
+import 'package:flutter/material.dart';
+import 'screen/library/item.screen.dart';
+import 'package:objectbox/objectbox.dart';
 
 late final Store store;
 
@@ -35,7 +36,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: HomePage(),
+      home: HomePage(), //navigate to first page
     );
   }
 }

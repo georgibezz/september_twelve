@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'home.screen.dart';
-import 'objectbox.g.dart';
+import 'package:objectbox/objectbox.dart';
 
 void main() {
   runApp(const MyApp());
