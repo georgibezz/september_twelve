@@ -1,61 +1,81 @@
+import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'main.dart';
-import 'item.entity.dart';
+import 'item.entity.dart'; // Import your 'Item' entity
+import 'objectbox.g.dart'; // Import your generated objectbox file
 
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+class UserHomePage extends StatefulWidget {
+  const UserHomePage({Key? key}) : super(key: key);
 
-  void showItemDetails(BuildContext context, Item item) {
-    // Show a dialog or navigate to a new screen to display item details.
-    showDialog(
-      context: context,
-      builder: (_) {
-        return AlertDialog(
-          title: Text(item.name),
-          content: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('Also Called: ${item.alsoCalled}'),
-              // Add more details here if needed
-            ],
-          ),
-          actions: [
-            ElevatedButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text('Close'),
-            ),
-          ],
-        );
-      },
-    );
+  @override
+  State<UserHomePage> createState() => _UserHomePageState();
+}
+
+class _UserHomePageState extends State<UserHomePage> {
+  Store? _store;
+  Box<Item>? itemBox;
+  Stream? stream;
+
+  final adminAppServerIp = '137.158.109.230'; // Replace with the admin app's server IP
+  final adminAppServerPort = '9999'; // Replace with the admin app's server port
+
+  @override
+  void initState() {
+    super.initState();
+    openStore().then((Store store) {
+      _store = store;
+      Sync.client(
+        store,
+        'ws://$adminAppServerIp:$adminAppServerPort', // Use the admin app's server details
+        SyncCredentials.none(),
+      ).start();
+
+      itemBox = store.box<Item>();
+      stream = _store?.watch<Item>();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Item List'),
+        title: const Text('User Items'), // Change the title as needed
       ),
-      body: StreamBuilder<List<Item>>(
-        stream: store.box<Item>().query().watch(triggerImmediately: true).map((e) => e.find()),
-        initialData: const <Item>[],
-        builder: (_, snapshot) {
-          final items = snapshot.data!;
-          return ListView.builder(
-            itemCount: items.length,
-            itemBuilder: (_, index) {
-              final item = items[index];
-              return Card(
-                child: ListTile(
-                  title: Text(item.name),
-                  onTap: () => showItemDetails(context, item), // Show details on tap
-                ),
-              );
-            },
-          );
-        },
+      body: Center(
+        child: StreamBuilder<void>(
+            stream: stream,
+            builder: (context, AsyncSnapshot<void> snapshot) {
+              List<Item>? items =
+                  itemBox?.getAll().toList() ?? [];
+
+              if (items.isNotEmpty) {
+                return ListView.builder(
+                  itemBuilder: (BuildContext context, int index) {
+                    final item = items[index];
+                    return Card(
+                      child: ListTile(
+                        title: Text(item.name),
+                        subtitle: Text('Also Called: ${item.alsoCalled}'),
+                      ),
+                    );
+                  },
+                  itemCount: items.length,
+                );
+              }
+
+              if (snapshot.hasError) {
+                return const Text("Error");
+              }
+
+              return const CircularProgressIndicator();
+            }),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _store?.close();
   }
 }
