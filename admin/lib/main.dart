@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'home.screen.dart';
-import 'objectbox.g.dart';
+import 'package:admin/objectbox.g.dart';
 
 late final Store store;
 
