@@ -1,0 +1,2 @@
+// TODO: Add plan enetity and attributes. Run: flutter pub run build_runner build. Copy and past admin/lib/objectbox-model.json into sync-server/data/objectbox-model.json
+//TODO: Ask georgi to update server with new objectbox-model.json file (after pushing updates to git)
