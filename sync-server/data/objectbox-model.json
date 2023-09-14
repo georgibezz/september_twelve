@@ -62,9 +62,129 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "3:1966533624244129117",
+      "lastPropertyId": "6:9111419610059559968",
+      "name": "Conditions",
+      "flags": 2,
+      "properties": [
+        {
+          "id": "1:1349339818986546333",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:352385846039077532",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:9085284176091694185",
+          "name": "description",
+          "type": 9
+        },
+        {
+          "id": "4:792827001265069545",
+          "name": "causes",
+          "type": 30
+        },
+        {
+          "id": "5:7766543554273177516",
+          "name": "complications",
+          "type": 30
+        },
+        {
+          "id": "6:9111419610059559968",
+          "name": "isSelected",
+          "type": 1
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "4:8428030114654940011",
+      "lastPropertyId": "6:1851100795372671687",
+      "name": "Plan",
+      "flags": 2,
+      "properties": [
+        {
+          "id": "1:6327529383786079147",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:8936531565315934033",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:7964879782990342903",
+          "name": "commonlyUsedDrugs",
+          "type": 9
+        },
+        {
+          "id": "4:7612645864138263967",
+          "name": "herbalAlternative",
+          "type": 9
+        },
+        {
+          "id": "5:9002226558457362575",
+          "name": "howToUse",
+          "type": 9
+        },
+        {
+          "id": "6:1851100795372671687",
+          "name": "caution",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "5:4575875131223212416",
+      "lastPropertyId": "6:695395755464468694",
+      "name": "Symptoms",
+      "flags": 2,
+      "properties": [
+        {
+          "id": "1:1724409736652803297",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:4577406097205428317",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:6881348032747091817",
+          "name": "description",
+          "type": 9
+        },
+        {
+          "id": "4:3278797702413526799",
+          "name": "causes",
+          "type": 30
+        },
+        {
+          "id": "5:1363405949316445053",
+          "name": "complications",
+          "type": 30
+        },
+        {
+          "id": "6:695395755464468694",
+          "name": "isSelected",
+          "type": 1
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "2:1903011254579719916",
+  "lastEntityId": "5:4575875131223212416",
   "lastIndexId": "0:0",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",

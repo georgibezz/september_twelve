@@ -1,2 +1,22 @@
-// TODO: Add symptom enetity and attributes. Run: flutter pub run build_runner build. Copy and past admin/lib/objectbox-model.json into sync-server/data/objectbox-model.json
-//TODO: Ask georgi to update server with new objectbox-model.json file (after pushing updates to git)
+import 'package:objectbox/objectbox.dart';
+
+@Sync()
+@Entity()
+class Conditions {
+  @Id()
+  int id = 0;
+
+  String name;
+  String description;
+  List<String> causes;
+  List<String> complications;
+  bool isSelected = false; // Add this line
+
+  Conditions(
+    this.id,
+    this.name,
+    this.description,
+    this.complications,
+    this.causes,
+  );
+}

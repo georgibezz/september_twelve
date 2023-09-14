@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:admin/objectbox.g.dart';
+import 'package:admin/screen/condition/condition.screen.dart';
 import 'package:flutter/material.dart';
 import 'screen/library/item.screen.dart';
 import 'package:objectbox/objectbox.dart';
@@ -36,7 +37,48 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: HomePage(), //navigate to first page
+      home: HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Home Page'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => ItemPage(), // Navigate to ItemsPage
+                  ),
+                );
+              },
+              child: const Text('Items'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        ConditionsPage(), // Navigate to SymptomsPage
+                  ),
+                );
+              },
+              child: const Text('Symptoms'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

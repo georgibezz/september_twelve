@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import '../../main.dart';
 import '../../model/item.entity.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class ItemPage extends StatefulWidget {
+  const ItemPage({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<ItemPage> createState() => _ItemPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _ItemPageState extends State<ItemPage> {
   late final TextEditingController nameController;
   late final TextEditingController alsoCalledController;
   late final TextEditingController partUsedController;

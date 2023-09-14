@@ -4,75 +4,200 @@
   "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
   "entities": [
     {
-      "id": "1:6125918771824127096",
-      "lastPropertyId": "10:4791227235006097797",
+      "id": "2:1903011254579719916",
+      "lastPropertyId": "10:1081995962852051789",
       "name": "Item",
       "flags": 2,
       "properties": [
         {
-          "id": "1:7961795032446373609",
+          "id": "1:8026742067914846765",
           "name": "id",
           "type": 6,
           "flags": 1
         },
         {
-          "id": "2:2278980155571571509",
+          "id": "2:3403327070671809945",
           "name": "name",
           "type": 9
         },
         {
-          "id": "3:1162163365839710878",
+          "id": "3:4477253838581226508",
           "name": "alsoCalled",
           "type": 9
         },
         {
-          "id": "4:4801935736562217584",
+          "id": "4:5763331632012494661",
           "name": "partUsed",
           "type": 9
         },
         {
-          "id": "5:799642972357475690",
+          "id": "5:3973098183593134962",
           "name": "source",
           "type": 9
         },
         {
-          "id": "6:104760208925562338",
+          "id": "6:4375043172325113776",
           "name": "formsAvailable",
           "type": 9
         },
         {
-          "id": "7:7508010154888187681",
+          "id": "7:2116737161334687215",
           "name": "uses",
           "type": 9
         },
         {
-          "id": "8:6332947896890297527",
+          "id": "8:276435706378502597",
           "name": "caution",
           "type": 9
         },
         {
-          "id": "9:7729924831244115370",
+          "id": "9:2445717838536895213",
           "name": "consumerInfo",
           "type": 9
         },
         {
-          "id": "10:4791227235006097797",
+          "id": "10:1081995962852051789",
           "name": "references",
           "type": 9
         }
       ],
       "relations": []
+    },
+    {
+      "id": "3:1966533624244129117",
+      "lastPropertyId": "6:9111419610059559968",
+      "name": "Conditions",
+      "flags": 2,
+      "properties": [
+        {
+          "id": "1:1349339818986546333",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:352385846039077532",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:9085284176091694185",
+          "name": "description",
+          "type": 9
+        },
+        {
+          "id": "4:792827001265069545",
+          "name": "causes",
+          "type": 30
+        },
+        {
+          "id": "5:7766543554273177516",
+          "name": "complications",
+          "type": 30
+        },
+        {
+          "id": "6:9111419610059559968",
+          "name": "isSelected",
+          "type": 1
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "4:8428030114654940011",
+      "lastPropertyId": "6:1851100795372671687",
+      "name": "Plan",
+      "flags": 2,
+      "properties": [
+        {
+          "id": "1:6327529383786079147",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:8936531565315934033",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:7964879782990342903",
+          "name": "commonlyUsedDrugs",
+          "type": 9
+        },
+        {
+          "id": "4:7612645864138263967",
+          "name": "herbalAlternative",
+          "type": 9
+        },
+        {
+          "id": "5:9002226558457362575",
+          "name": "howToUse",
+          "type": 9
+        },
+        {
+          "id": "6:1851100795372671687",
+          "name": "caution",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "5:4575875131223212416",
+      "lastPropertyId": "6:695395755464468694",
+      "name": "Symptoms",
+      "flags": 2,
+      "properties": [
+        {
+          "id": "1:1724409736652803297",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:4577406097205428317",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:6881348032747091817",
+          "name": "description",
+          "type": 9
+        },
+        {
+          "id": "4:3278797702413526799",
+          "name": "causes",
+          "type": 30
+        },
+        {
+          "id": "5:1363405949316445053",
+          "name": "complications",
+          "type": 30
+        },
+        {
+          "id": "6:695395755464468694",
+          "name": "isSelected",
+          "type": 1
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "1:6125918771824127096",
+  "lastEntityId": "5:4575875131223212416",
   "lastIndexId": "0:0",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
-  "retiredEntityUids": [],
+  "retiredEntityUids": [
+    6996641867010639043
+  ],
   "retiredIndexUids": [],
-  "retiredPropertyUids": [],
+  "retiredPropertyUids": [
+    939184856482775463,
+    991969603301181828
+  ],
   "retiredRelationUids": [],
   "version": 1
 }
