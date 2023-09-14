@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "2:1903011254579719916",
-      "lastPropertyId": "4:5763331632012494661",
+      "lastPropertyId": "10:1081995962852051789",
       "name": "Item",
       "flags": 2,
       "properties": [
@@ -28,6 +28,36 @@
         {
           "id": "4:5763331632012494661",
           "name": "partUsed",
+          "type": 9
+        },
+        {
+          "id": "5:3973098183593134962",
+          "name": "source",
+          "type": 9
+        },
+        {
+          "id": "6:4375043172325113776",
+          "name": "formsAvailable",
+          "type": 9
+        },
+        {
+          "id": "7:2116737161334687215",
+          "name": "uses",
+          "type": 9
+        },
+        {
+          "id": "8:276435706378502597",
+          "name": "caution",
+          "type": 9
+        },
+        {
+          "id": "9:2445717838536895213",
+          "name": "consumerInfo",
+          "type": 9
+        },
+        {
+          "id": "10:1081995962852051789",
+          "name": "references",
           "type": 9
         }
       ],

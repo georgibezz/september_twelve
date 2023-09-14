@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:flutter/material.dart';
-import 'item.entity.dart'; // Import your 'Item' entity
+import 'package:flutter/material.dart'; // Import your 'Item' entity
+import 'package:user/model/item.entity.dart';
 import 'objectbox.g.dart'; // Import your generated objectbox file
 
 class UserHomePage extends StatefulWidget {
@@ -47,7 +47,6 @@ class _UserHomePageState extends State<UserHomePage> {
             builder: (context, AsyncSnapshot<void> snapshot) {
               List<Item>? items =
                   itemBox?.getAll().toList() ?? [];
-
               if (items.isNotEmpty) {
                 return ListView.builder(
                   itemBuilder: (BuildContext context, int index) {
