@@ -1,108 +1,41 @@
-import 'package:admin/objectbox.g.dart';
+import 'package:admin/main.dart';
+import 'package:admin/model/condition.entity.dart';
 import 'package:flutter/material.dart';
-import 'package:objectbox/objectbox.dart';
-import 'package:admin/model/condition.entity.dart'; // Update with your actual import
+import 'package:objectbox/objectbox.dart'; // Import ObjectBox
 
-class ConditionsPage extends StatefulWidget {
+class ConditionScreen extends StatefulWidget {
   @override
-  _ConditionsPageState createState() => _ConditionsPageState();
+  _ConditionScreenState createState() => _ConditionScreenState();
 }
 
-class _ConditionsPageState extends State<ConditionsPage> {
-  late final Store _store;
-  late final Box<Conditions> _conditionBox;
-  late List<Conditions> _conditions;
+class _ConditionScreenState extends State<ConditionScreen> {
+  late final Box<Conditions> _conditionBox; // Define a Box for Conditions
+  List<Conditions> _conditions = [];
 
   @override
   void initState() {
     super.initState();
-    _store = Store(getObjectBoxModel());
-    _conditionBox = Box<Conditions>(_store);
-    _loadConditions();
+    _conditionBox = store.box<Conditions>(); // Initialize the Condition Box
+    _loadConditions(); // Load conditions from the database
   }
 
   Future<void> _loadConditions() async {
-    _conditions = await _conditionBox.getAll();
+    _conditions = _conditionBox.getAll();
     setState(() {});
   }
 
-  @override
-  void dispose() {
-    _store.close();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Conditions Listing'),
-      ),
-      body: ListView.builder(
-        itemCount: _conditions.length,
-        itemBuilder: (context, index) {
-          final condition = _conditions[index];
-          return Card(
-            margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            child: ListTile(
-              title: Text(condition.name),
-              subtitle: Text(condition.description),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.edit),
-                    onPressed: () {
-                      showEditDialog(context, condition);
-                    },
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.delete),
-                    onPressed: () {
-                      _deleteCondition(condition);
-                    },
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Navigate to add condition screen
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AddConditionPage(
-                onAdditionComplete: () {
-                  _loadConditions();
-                },
-              ),
-            ),
-          );
-        },
-        child: Icon(Icons.add),
-      ),
-    );
-  }
-
-  void _deleteCondition(Conditions condition) {
-    _conditionBox.remove(condition.id);
-    _loadConditions();
-  }
-
-  Future<void> showEditDialog(BuildContext context, Conditions condition) async {
-    final TextEditingController nameController = TextEditingController(text: condition.name);
-    final TextEditingController descriptionController = TextEditingController(text: condition.description);
-
+  void _addCondition() {
     showDialog(
       context: context,
-      builder: (_) {
+      builder: (context) {
+        final TextEditingController nameController = TextEditingController();
+        final TextEditingController descriptionController = TextEditingController();
+        final TextEditingController causesController = TextEditingController();
+        final TextEditingController complicationsController = TextEditingController();
+
         return AlertDialog(
-          title: Text('Edit Condition Details'),
+          title: Text('Add Condition'),
           content: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
@@ -113,118 +46,221 @@ class _ConditionsPageState extends State<ConditionsPage> {
                 controller: descriptionController,
                 decoration: InputDecoration(labelText: 'Description'),
               ),
+              TextField(
+                controller: causesController,
+                decoration: InputDecoration(labelText: 'Causes (comma-separated)'),
+              ),
+              TextField(
+                controller: complicationsController,
+                decoration:
+                InputDecoration(labelText: 'Complications (comma-separated)'),
+              ),
             ],
           ),
           actions: [
             ElevatedButton(
-              onPressed: () async {
-                // Update condition values
-                condition.name = nameController.text;
-                condition.description = descriptionController.text;
+              onPressed: () {
+                final String name = nameController.text;
+                final String description = descriptionController.text;
+                final List<String> causes =
+                causesController.text.split(',').map((e) => e.trim()).toList();
+                final List<String> complications = complicationsController.text
+                    .split(',')
+                    .map((e) => e.trim())
+                    .toList();
 
-                // Update condition in the database
-                await _conditionBox.put(condition);
+                if (name.isNotEmpty && description.isNotEmpty) {
+                  final newCondition = Conditions(
+                    0, // You can set a unique ID, or ObjectBox will auto-generate one.
+                    name,
+                    description,
+                    complications,
+                    causes,
+                  );
 
-                // Close the dialog
-                Navigator.pop(context);
-                _loadConditions();
+                  _conditionBox.put(newCondition);
+                  _loadConditions(); // Reload conditions after adding
+                  Navigator.pop(context);
+                }
               },
-              child: const Text('Save'),
-            ),
-            ElevatedButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Close'),
+              child: Text('Add'),
             ),
           ],
         );
       },
     );
   }
-}
 
-class AddConditionPage extends StatefulWidget {
-  final VoidCallback onAdditionComplete;
+  void _editCondition(Conditions condition) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        final TextEditingController nameController =
+        TextEditingController(text: condition.name);
+        final TextEditingController descriptionController =
+        TextEditingController(text: condition.description);
+        final TextEditingController causesController =
+        TextEditingController(text: condition.causes.join(', '));
+        final TextEditingController complicationsController =
+        TextEditingController(text: condition.complications.join(', '));
 
-  const AddConditionPage({required this.onAdditionComplete});
+        return AlertDialog(
+          title: Text('Edit Condition'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: nameController,
+                decoration: InputDecoration(labelText: 'Name'),
+              ),
+              TextField(
+                controller: descriptionController,
+                decoration: InputDecoration(labelText: 'Description'),
+              ),
+              TextField(
+                controller: causesController,
+                decoration: InputDecoration(labelText: 'Causes (comma-separated)'),
+              ),
+              TextField(
+                controller: complicationsController,
+                decoration:
+                InputDecoration(labelText: 'Complications (comma-separated)'),
+              ),
+            ],
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                final String name = nameController.text;
+                final String description = descriptionController.text;
+                final List<String> causes =
+                causesController.text.split(',').map((e) => e.trim()).toList();
+                final List<String> complications = complicationsController.text
+                    .split(',')
+                    .map((e) => e.trim())
+                    .toList();
 
-  @override
-  _AddConditionPageState createState() => _AddConditionPageState();
-}
+                if (name.isNotEmpty && description.isNotEmpty) {
+                  final updatedCondition = condition
+                    ..name = name
+                    ..description = description
+                    ..causes = causes
+                    ..complications = complications;
 
-class _AddConditionPageState extends State<AddConditionPage> {
-  late final Store _store;
-  late final Box<Conditions> _conditionBox;
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    _store = Store(getObjectBoxModel());
-    _conditionBox = Box<Conditions>(_store);
+                  _conditionBox.put(updatedCondition);
+                  _loadConditions(); // Reload conditions after editing
+                  Navigator.pop(context);
+                }
+              },
+              child: Text('Save'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
-  @override
-  void dispose() {
-    _store.close();
-    _nameController.dispose();
-    _descriptionController.dispose();
-    super.dispose();
+  void _viewConditionDetails(Conditions condition) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Condition Details'),
+          content: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Name: ${condition.name}'),
+              Text('Description: ${condition.description}'),
+              Text('Causes: ${condition.causes.join(', ')}'),
+              Text('Complications: ${condition.complications.join(', ')}'),
+              // Add more condition attributes here
+            ],
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('Close'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _deleteCondition(Conditions condition) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Delete Condition'),
+          content: Text('Are you sure you want to delete this condition?'),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                _conditionBox.remove(condition.id);
+                _loadConditions(); // Reload conditions after deleting
+                Navigator.pop(context);
+              },
+              child: Text('Delete'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('Cancel'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Condition'),
+        title: Text('Conditions'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: _nameController,
-              decoration: InputDecoration(labelText: 'Name'),
+      body: ListView.builder(
+        itemCount: _conditions.length,
+        itemBuilder: (context, index) {
+          final condition = _conditions[index];
+          return ListTile(
+            title: Text(condition.name),
+            subtitle: Text(condition.description),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  icon: Icon(Icons.edit),
+                  onPressed: () {
+                    _editCondition(condition);
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () {
+                    _deleteCondition(condition);
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.visibility),
+                  onPressed: () {
+                    _viewConditionDetails(condition);
+                  },
+                ),
+              ],
             ),
-            TextField(
-              controller: _descriptionController,
-              decoration: InputDecoration(labelText: 'Description'),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                await _addCondition();
-              },
-              child: const Text('Add Condition to Database'),
-            ),
-          ],
-        ),
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _addCondition,
+        child: Icon(Icons.add),
       ),
     );
-  }
-
-  Future<void> _addCondition() async {
-    final String name = _nameController.text.trim();
-    final String description = _descriptionController.text.trim();
-
-    if (name.isNotEmpty && description.isNotEmpty) {
-      final Conditions newCondition = Conditions(0, name, description, [], []);
-      await _conditionBox.put(newCondition);
-      widget.onAdditionComplete();
-      Navigator.pop(context);
-    } else {
-      showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-          title: Text('Error'),
-          content: Text('Name and Description are required fields.'),
-          actions: <Widget>[
-            ElevatedButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text('OK'),
-            ),
-          ],
-        ),
-      );
-    }
   }
 }

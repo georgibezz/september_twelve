@@ -1,9 +1,10 @@
 import 'dart:io';
 import 'package:admin/objectbox.g.dart';
 import 'package:admin/screen/condition/condition.screen.dart';
+import 'package:admin/screen/plan/plan.screen.dart';
+import 'package:admin/screen/symptom/symptom.screen.dart';
 import 'package:flutter/material.dart';
 import 'screen/library/item.screen.dart';
-import 'package:objectbox/objectbox.dart';
 
 late final Store store;
 
@@ -70,11 +71,33 @@ class HomePage extends StatelessWidget {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) =>
-                        ConditionsPage(), // Navigate to SymptomsPage
+                        ConditionScreen(), // Navigate to SymptomsPage
+                  ),
+                );
+              },
+              child: const Text('Condition'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        SymptomScreen(), // Navigate to SymptomsPage
                   ),
                 );
               },
               child: const Text('Symptoms'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        PlanScreen(), // Navigate to SymptomsPage
+                  ),
+                );
+              },
+              child: const Text('Plans'),
             ),
           ],
         ),
