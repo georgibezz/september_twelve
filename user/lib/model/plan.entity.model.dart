@@ -6,16 +6,18 @@ class Plan {
   @Id()
   int id = 0;
   String name;
-  String commonlyUsedDrugs;
-  String herbalAlternative;
-  String howToUse;
+  String description;
+  String symptomOrCondition; // Store either symptom or condition name
+  List<String> herbalAlternatives = []; // List of herbal alternatives
+  List<String> howToUse;
   String caution;
 
   Plan(
       this.name,
-      this.commonlyUsedDrugs,
-      this.herbalAlternative,
-      this.howToUse,
-      this.caution,
-      );
+      this.description,
+      this.symptomOrCondition,
+     this.herbalAlternatives,
+    this.howToUse,
+  this.caution,
+  );
 }

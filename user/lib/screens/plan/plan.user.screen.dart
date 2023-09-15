@@ -72,7 +72,7 @@ class _PlanScreenState extends State<PlanScreen> {
                 return Card(
                   child: ListTile(
                     title: Text(plan.name),
-                    subtitle: Text('Commonly Used Drugs: ${plan.commonlyUsedDrugs}'),
+                    subtitle: Text('Symptom or Condition: ${plan.symptomOrCondition}'),
                     onTap: () {
                       // Navigate to the plan detail page when tapped
                       Navigator.of(context).push(
@@ -209,7 +209,7 @@ class _PlanDetailPageState extends State<PlanDetailPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Name: ${widget.plan.name}'),
-            Text('Commonly Used Drugs: ${widget.plan.commonlyUsedDrugs}'),
+            Text('Description: ${widget.plan.description}'),
           ],
         );
       case 'Herbal Alternative':
@@ -217,12 +217,19 @@ class _PlanDetailPageState extends State<PlanDetailPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Display the list of herbal alternatives here
-            for (final herbalAlternative in widget.plan.herbalAlternative.split(','))
+            for (final herbalAlternative in widget.plan.herbalAlternatives)
               Text('Herbal Alternative: $herbalAlternative'),
           ],
         );
       case 'Instructions':
-        return Text('How to Use:\n${widget.plan.howToUse}');
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Display the list of instructions here
+            for (final instruction in widget.plan.howToUse)
+              Text('How to Use: $instruction'),
+          ],
+        );
       case 'Caution':
         return Text('Caution:\n${widget.plan.caution}');
       case 'Reviews':
