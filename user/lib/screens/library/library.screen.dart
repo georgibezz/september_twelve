@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:objectbox/objectbox.dart';
 import 'package:user/model/item.entity.dart';
 import 'package:user/objectbox.g.dart';
 

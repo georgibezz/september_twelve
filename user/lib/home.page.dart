@@ -43,12 +43,12 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        SymptomScreen(), // Navigate to SymptomsPage
-                  ),
-                );
+                //Navigator.of(context).push(
+                //  MaterialPageRoute(
+                   // builder: (context) =>
+                   //     SymptomScreen(), // Navigate to SymptomsPage
+                 // ),
+               // );
               },
               child: const Text('Symptoms'),
             ),

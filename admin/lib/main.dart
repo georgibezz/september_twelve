@@ -1,10 +1,11 @@
 import 'dart:io';
-import 'package:admin/objectbox.g.dart';
 import 'package:admin/screen/condition/condition.screen.dart';
 import 'package:admin/screen/plan/plan.screen.dart';
 import 'package:admin/screen/symptom/symptom.screen.dart';
 import 'package:flutter/material.dart';
+import 'package:objectbox/objectbox.dart';
 import 'screen/library/item.screen.dart';
+import 'package:admin/objectbox.g.dart';
 
 late final Store store;
 
@@ -20,6 +21,7 @@ void main() async {
   }
   runApp(const MyApp());
 }
+
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
