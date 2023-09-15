@@ -104,46 +104,6 @@
       "relations": []
     },
     {
-      "id": "4:8428030114654940011",
-      "lastPropertyId": "6:1851100795372671687",
-      "name": "Plan",
-      "flags": 2,
-      "properties": [
-        {
-          "id": "1:6327529383786079147",
-          "name": "id",
-          "type": 6,
-          "flags": 1
-        },
-        {
-          "id": "2:8936531565315934033",
-          "name": "name",
-          "type": 9
-        },
-        {
-          "id": "3:7964879782990342903",
-          "name": "commonlyUsedDrugs",
-          "type": 9
-        },
-        {
-          "id": "4:7612645864138263967",
-          "name": "herbalAlternative",
-          "type": 9
-        },
-        {
-          "id": "5:9002226558457362575",
-          "name": "howToUse",
-          "type": 9
-        },
-        {
-          "id": "6:1851100795372671687",
-          "name": "caution",
-          "type": 9
-        }
-      ],
-      "relations": []
-    },
-    {
       "id": "5:4575875131223212416",
       "lastPropertyId": "6:695395755464468694",
       "name": "Symptoms",
@@ -182,21 +142,73 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "6:8150156157682383431",
+      "lastPropertyId": "7:420380583510016754",
+      "name": "Plan",
+      "flags": 2,
+      "properties": [
+        {
+          "id": "1:466946951409669534",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:6745097383755743941",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:547741291980568833",
+          "name": "description",
+          "type": 9
+        },
+        {
+          "id": "4:3543519101095518930",
+          "name": "symptomOrCondition",
+          "type": 9
+        },
+        {
+          "id": "5:4383594759343017389",
+          "name": "herbalAlternatives",
+          "type": 30
+        },
+        {
+          "id": "6:5980841042833645411",
+          "name": "howToUse",
+          "type": 30
+        },
+        {
+          "id": "7:420380583510016754",
+          "name": "caution",
+          "type": 9
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "5:4575875131223212416",
+  "lastEntityId": "6:8150156157682383431",
   "lastIndexId": "0:0",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [
-    6996641867010639043
+    6996641867010639043,
+    8428030114654940011
   ],
   "retiredIndexUids": [],
   "retiredPropertyUids": [
     939184856482775463,
-    991969603301181828
+    991969603301181828,
+    6327529383786079147,
+    8936531565315934033,
+    7964879782990342903,
+    7612645864138263967,
+    9002226558457362575,
+    1851100795372671687
   ],
   "retiredRelationUids": [],
   "version": 1
