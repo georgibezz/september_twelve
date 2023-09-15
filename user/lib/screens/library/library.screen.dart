@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:user/model/item.entity.dart';
-import 'objectbox.g.dart';
+import 'package:user/objectbox.g.dart';
 
-class UserHomePage extends StatefulWidget {
-  const UserHomePage({Key? key}) : super(key: key);
+class LibraryPage extends StatefulWidget {
+  const LibraryPage({Key? key}) : super(key: key);
 
   @override
-  State<UserHomePage> createState() => _UserHomePageState();
+  State<LibraryPage> createState() => _LibraryPageState();
 }
 
-class _UserHomePageState extends State<UserHomePage> {
+class _LibraryPageState extends State<LibraryPage> {
   Store? _store;
   Box<Item>? itemBox;
   late Stream<List<Item>> stream;

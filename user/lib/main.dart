@@ -1,7 +1,10 @@
-
 import 'package:flutter/material.dart';
-import 'home.screen.dart';
+import 'package:user/home.page.dart';
+import 'package:user/screens/library/library.screen.dart';
+import 'package:user/screens/plan/plan.user.screen.dart';
+import 'package:user/screens/symptoms/symptom.screen.dart';
 
+import 'screens/condition/condition.user.screen.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -17,8 +20,60 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: UserHomePage(),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Home Page'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => HomeScreen(), // Navigate to ItemsPage
+                  ),
+                );
+              },
+              child: const Text('Items'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        ConditionScreen(), // Navigate to SymptomsPage
+                  ),
+                );
+              },
+              child: const Text('Condition'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        SymptomScreen(), // Navigate to SymptomsPage
+                  ),
+                );
+              },
+              child: const Text('Symptoms'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        PlanScreen(), // Navigate to SymptomsPage
+                  ),
+                );
+              },
+              child: const Text('Plans'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
