@@ -12,6 +12,16 @@ class _PlanScreenState extends State<PlanScreen> {
   late final Box<Plan> _planBox; // Define a Box for Plans
   List<Plan> _plans = [];
 
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController symptomOrConditionController = TextEditingController();
+  final TextEditingController herbalAlternativeNameController = TextEditingController();
+  final TextEditingController howToUseController = TextEditingController();
+  final TextEditingController cautionController = TextEditingController();
+  final List<String> herbalAlternativeNames = []; // Initialize the list
+  final List<String> howToUseList = []; // Initialize the list
+  final List<String> cautionList = []; // Initialize the list
+
   @override
   void initState() {
     super.initState();
@@ -28,13 +38,6 @@ class _PlanScreenState extends State<PlanScreen> {
     showDialog(
       context: context,
       builder: (context) {
-        final TextEditingController nameController = TextEditingController();
-        final TextEditingController descriptionController = TextEditingController();
-        final TextEditingController symptomOrConditionController = TextEditingController();
-        final List<String> herbalAlternatives = [];
-        final List<String> howToUse = [];
-        final TextEditingController cautionController = TextEditingController();
-
         return AlertDialog(
           title: Text('Add Plan'),
           content: SingleChildScrollView(
@@ -49,51 +52,85 @@ class _PlanScreenState extends State<PlanScreen> {
                   controller: descriptionController,
                   decoration: InputDecoration(labelText: 'Description'),
                 ),
-                TextField(
-                  controller: symptomOrConditionController,
-                  decoration: InputDecoration(labelText: 'Symptom or Condition'),
+                ListTile(
+                  title: Text('Select Type:'),
+                  contentPadding: EdgeInsets.all(0),
+                  trailing: DropdownButton<String>(
+                    value: symptomOrConditionController.text,
+                    onChanged: (value) {
+                      setState(() {
+                        symptomOrConditionController.text = value!;
+                      });
+                    },
+                    items: ['Symptom', 'Condition'].map((type) {
+                      return DropdownMenuItem<String>(
+                        value: type,
+                        child: Text(type),
+                      );
+                    }).toList(),
+                  ),
                 ),
+                SizedBox(height: 16),
                 Text('Herbal Alternatives:'),
-                Row(
+                Column(
                   children: [
-                    Expanded(
-                      child: TextField(
-                        decoration: InputDecoration(labelText: 'Herbal Alternative'),
-                        onChanged: (value) {
-                          herbalAlternatives.add(value);
-                        },
-                      ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: herbalAlternativeNameController,
+                            decoration: InputDecoration(labelText: 'Name'),
+                          ),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.add),
+                          onPressed: () {
+                            final name = herbalAlternativeNameController.text;
+                            final howToUse = howToUseController.text;
+                            final caution = cautionController.text;
+
+                            if (name.isNotEmpty) {
+                              herbalAlternativeNames.add(name);
+                              howToUseList.add(howToUse);
+                              cautionList.add(caution);
+
+                              herbalAlternativeNameController.clear();
+                              howToUseController.clear();
+                              cautionController.clear();
+
+                              setState(() {});
+                            }
+                          },
+                        ),
+                      ],
                     ),
-                    IconButton(
-                      icon: Icon(Icons.add),
-                      onPressed: () {
-                        setState(() {});
-                      },
+                    SizedBox(height: 8),
+                    Column(
+                      children: List.generate(herbalAlternativeNames.length, (index) {
+                        return Card(
+                          child: ListTile(
+                            title: Text(herbalAlternativeNames[index]),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('How to Use: ${howToUseList[index]}'),
+                                Text('Caution: ${cautionList[index]}'),
+                              ],
+                            ),
+                            trailing: IconButton(
+                              icon: Icon(Icons.delete),
+                              onPressed: () {
+                                herbalAlternativeNames.removeAt(index);
+                                howToUseList.removeAt(index);
+                                cautionList.removeAt(index);
+                                setState(() {});
+                              },
+                            ),
+                          ),
+                        );
+                      }),
                     ),
                   ],
-                ),
-                Text('How to Use:'),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        decoration: InputDecoration(labelText: 'How to Use'),
-                        onChanged: (value) {
-                          howToUse.add(value);
-                        },
-                      ),
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.add),
-                      onPressed: () {
-                        setState(() {});
-                      },
-                    ),
-                  ],
-                ),
-                TextField(
-                  controller: cautionController,
-                  decoration: InputDecoration(labelText: 'Caution'),
                 ),
               ],
             ),
@@ -104,16 +141,15 @@ class _PlanScreenState extends State<PlanScreen> {
                 final String name = nameController.text;
                 final String description = descriptionController.text;
                 final String symptomOrCondition = symptomOrConditionController.text;
-                final String caution = cautionController.text;
 
-                if (name.isNotEmpty && (symptomOrCondition.isNotEmpty || herbalAlternatives.isNotEmpty)) {
+                if (name.isNotEmpty) {
                   final newPlan = Plan(
                     name,
                     description,
                     symptomOrCondition,
-                    herbalAlternatives,
-                    howToUse,
-                    caution,
+                    herbalAlternativeNames,
+                    howToUseList,
+                    cautionList,
                   );
 
                   _planBox.put(newPlan);
@@ -135,10 +171,11 @@ class _PlanScreenState extends State<PlanScreen> {
       builder: (context) {
         final TextEditingController nameController = TextEditingController(text: plan.name);
         final TextEditingController descriptionController = TextEditingController(text: plan.description);
-        final TextEditingController symptomOrConditionController = TextEditingController(text: plan.symptomOrCondition);
-        final List<String> herbalAlternatives = plan.herbalAlternatives;
-        final List<String> howToUse = plan.howToUse;
-        final TextEditingController cautionController = TextEditingController(text: plan.caution);
+        final TextEditingController symptomOrConditionController =
+        TextEditingController(text: plan.symptomOrCondition);
+        final List<String> herbalAlternativeNames = plan.herbalAlternativeNames;
+        final List<String> howToUseList = plan.howToUseList;
+        final List<String> cautionList = plan.cautionList;
 
         return AlertDialog(
           title: Text('Edit Plan'),
@@ -154,63 +191,85 @@ class _PlanScreenState extends State<PlanScreen> {
                   controller: descriptionController,
                   decoration: InputDecoration(labelText: 'Description'),
                 ),
-                TextField(
-                  controller: symptomOrConditionController,
-                  decoration: InputDecoration(labelText: 'Symptom or Condition'),
+                ListTile(
+                  title: Text('Select Type:'),
+                  contentPadding: EdgeInsets.all(0),
+                  trailing: DropdownButton<String>(
+                    value: symptomOrConditionController.text,
+                    onChanged: (value) {
+                      setState(() {
+                        symptomOrConditionController.text = value!;
+                      });
+                    },
+                    items: ['Symptom', 'Condition'].map((type) {
+                      return DropdownMenuItem<String>(
+                        value: type,
+                        child: Text(type),
+                      );
+                    }).toList(),
+                  ),
                 ),
+                SizedBox(height: 16),
                 Text('Herbal Alternatives:'),
                 Column(
-                  children: herbalAlternatives.map((herbalAlternative) {
-                    return Row(
+                  children: [
+                    Row(
                       children: [
                         Expanded(
                           child: TextField(
-                            controller: TextEditingController(text: herbalAlternative),
-                            decoration: InputDecoration(labelText: 'Herbal Alternative'),
-                            onChanged: (value) {
-                              herbalAlternatives[herbalAlternatives.indexOf(herbalAlternative)] = value;
-                            },
+                            controller: herbalAlternativeNameController,
+                            decoration: InputDecoration(labelText: 'Name'),
                           ),
                         ),
                         IconButton(
-                          icon: Icon(Icons.delete),
+                          icon: Icon(Icons.add),
                           onPressed: () {
-                            herbalAlternatives.remove(herbalAlternative);
-                            setState(() {});
+                            final name = herbalAlternativeNameController.text;
+                            final howToUse = howToUseController.text;
+                            final caution = cautionController.text;
+
+                            if (name.isNotEmpty) {
+                              herbalAlternativeNames.add(name);
+                              howToUseList.add(howToUse);
+                              cautionList.add(caution);
+
+                              herbalAlternativeNameController.clear();
+                              howToUseController.clear();
+                              cautionController.clear();
+
+                              setState(() {});
+                            }
                           },
                         ),
                       ],
-                    );
-                  }).toList(),
-                ),
-                Text('How to Use:'),
-                Column(
-                  children: howToUse.map((instruction) {
-                    return Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            controller: TextEditingController(text: instruction),
-                            decoration: InputDecoration(labelText: 'How to Use'),
-                            onChanged: (value) {
-                              howToUse[howToUse.indexOf(instruction)] = value;
-                            },
+                    ),
+                    SizedBox(height: 8),
+                    Column(
+                      children: List.generate(herbalAlternativeNames.length, (index) {
+                        return Card(
+                          child: ListTile(
+                            title: Text(herbalAlternativeNames[index]),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('How to Use: ${howToUseList[index]}'),
+                                Text('Caution: ${cautionList[index]}'),
+                              ],
+                            ),
+                            trailing: IconButton(
+                              icon: Icon(Icons.delete),
+                              onPressed: () {
+                                herbalAlternativeNames.removeAt(index);
+                                howToUseList.removeAt(index);
+                                cautionList.removeAt(index);
+                                setState(() {});
+                              },
+                            ),
                           ),
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: () {
-                            howToUse.remove(instruction);
-                            setState(() {});
-                          },
-                        ),
-                      ],
-                    );
-                  }).toList(),
-                ),
-                TextField(
-                  controller: cautionController,
-                  decoration: InputDecoration(labelText: 'Caution'),
+                        );
+                      }),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -221,17 +280,18 @@ class _PlanScreenState extends State<PlanScreen> {
                 final String name = nameController.text;
                 final String description = descriptionController.text;
                 final String symptomOrCondition = symptomOrConditionController.text;
-                final String caution = cautionController.text;
 
-                if (name.isNotEmpty && (symptomOrCondition.isNotEmpty || herbalAlternatives.isNotEmpty)) {
-                  final updatedPlan = plan
-                    ..name = name
-                    ..description = description
-                    ..symptomOrCondition = symptomOrCondition
-                    ..herbalAlternatives = herbalAlternatives
-                    ..howToUse = howToUse
-                    ..caution = caution;
+                if (name.isNotEmpty) {
+                  final updatedPlan = Plan(
+                    name,
+                    description,
+                    symptomOrCondition,
+                    herbalAlternativeNames,
+                    howToUseList,
+                    cautionList,
+                  );
 
+                  updatedPlan.id = plan.id; // Preserve the ID
                   _planBox.put(updatedPlan);
                   _loadPlans(); // Reload plans after editing
                   Navigator.pop(context);
@@ -262,19 +322,19 @@ class _PlanScreenState extends State<PlanScreen> {
                 Text('Herbal Alternatives:'),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: plan.herbalAlternatives.map((herbalAlternative) {
-                    return Text('- $herbalAlternative');
-                  }).toList(),
+                  children: List.generate(plan.herbalAlternativeNames.length, (index) {
+                    return ListTile(
+                      title: Text(plan.herbalAlternativeNames[index]),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('How to Use: ${plan.howToUseList[index]}'),
+                          Text('Caution: ${plan.cautionList[index]}'),
+                        ],
+                      ),
+                    );
+                  }),
                 ),
-                Text('How to Use:'),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: plan.howToUse.map((instruction) {
-                    return Text('- $instruction');
-                  }).toList(),
-                ),
-                Text('Caution: ${plan.caution}'),
-                // Add more plan attributes here
               ],
             ),
           ),

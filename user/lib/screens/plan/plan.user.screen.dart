@@ -217,7 +217,7 @@ class _PlanDetailPageState extends State<PlanDetailPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Display the list of herbal alternatives here
-            for (final herbalAlternative in widget.plan.herbalAlternatives)
+            for (final herbalAlternative in widget.plan.herbalAlternativeNames)
               Text('Herbal Alternative: $herbalAlternative'),
           ],
         );
@@ -226,12 +226,12 @@ class _PlanDetailPageState extends State<PlanDetailPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Display the list of instructions here
-            for (final instruction in widget.plan.howToUse)
+            for (final instruction in widget.plan.howToUseList)
               Text('How to Use: $instruction'),
           ],
         );
       case 'Caution':
-        return Text('Caution:\n${widget.plan.caution}');
+        return Text('Caution:\n${widget.plan.cautionList}');
       case 'Reviews':
         return const Text('Functionality not yet implemented.');
       default:

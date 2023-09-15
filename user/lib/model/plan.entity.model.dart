@@ -8,16 +8,16 @@ class Plan {
   String name;
   String description;
   String symptomOrCondition; // Store either symptom or condition name
-  List<String> herbalAlternatives = []; // List of herbal alternatives
-  List<String> howToUse;
-  String caution;
+  List<String> herbalAlternativeNames = []; // List of herbal alternative names
+  List<String> howToUseList = []; // List of how to use instructions
+  List<String> cautionList = []; // List of caution instructions
 
   Plan(
       this.name,
       this.description,
       this.symptomOrCondition,
-     this.herbalAlternatives,
-    this.howToUse,
-  this.caution,
-  );
+      this.herbalAlternativeNames,
+      this.howToUseList,
+      this.cautionList,
+      );
 }
