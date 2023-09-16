@@ -178,136 +178,153 @@ class _PlanScreenState extends State<PlanScreen> {
     final TextEditingController editDescriptionController = TextEditingController(text: plan.description);
     final TextEditingController editSymptomOrConditionController = TextEditingController(text: plan.symptomOrCondition);
 
+    // Create controllers for herbal alternative fields
+    final List<TextEditingController> herbalAlternativeNameControllers = [];
+    final List<TextEditingController> howToUseControllers = [];
+    final List<TextEditingController> cautionControllers = [];
+
+    for (int i = 0; i < plan.herbalAlternativeNames.length; i++) {
+      herbalAlternativeNameControllers.add(TextEditingController(text: plan.herbalAlternativeNames[i]));
+      howToUseControllers.add(TextEditingController(text: plan.howToUseList[i]));
+      cautionControllers.add(TextEditingController(text: plan.cautionList[i]));
+    }
+
+    int selectedHerbalAlternativeIndex = -1; // To keep track of the selected herbal alternative
+
     showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: Text('Edit Plan'),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  controller: editNameController,
-                  decoration: InputDecoration(labelText: 'Name'),
-                ),
-                TextField(
-                  controller: editDescriptionController,
-                  decoration: InputDecoration(labelText: 'Description'),
-                ),
-                ListTile(
-                  title: Text('Select Type:'),
-                  contentPadding: EdgeInsets.all(0),
-                  trailing: DropdownButton<String>(
-                    value: editSymptomOrConditionController.text,
-                    onChanged: (value) {
-                      setState(() {
-                        editSymptomOrConditionController.text = value!;
-                      });
-                    },
-                    items: ['Symptom', 'Condition'].map((type) {
-                      return DropdownMenuItem<String>(
-                        value: type,
-                        child: Text(type),
-                      );
-                    }).toList(),
-                  ),
-                ),
-                SizedBox(height: 16),
-                Text('Herbal Alternatives:'),
-                Column(
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Text('Edit Plan'),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            controller: herbalAlternativeNameController,
-                            decoration: InputDecoration(labelText: 'Name'),
-                          ),
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.add),
-                          onPressed: () {
-                            final name = herbalAlternativeNameController.text;
-                            final howToUse = howToUseController.text;
-                            final caution = cautionController.text;
-
-                            if (name.isNotEmpty) {
-                              herbalAlternativeNames.add(name);
-                              howToUseList.add(howToUse);
-                              cautionList.add(caution);
-
-                              herbalAlternativeNameController.clear();
-                              howToUseController.clear();
-                              cautionController.clear();
-
-                              setState(() {});
-                            }
-                          },
-                        ),
-                      ],
+                    TextField(
+                      controller: editNameController,
+                      decoration: InputDecoration(labelText: 'Name'),
                     ),
-                    SizedBox(height: 8),
+                    TextField(
+                      controller: editDescriptionController,
+                      decoration: InputDecoration(labelText: 'Description'),
+                    ),
+                    ListTile(
+                      title: Text('Select Type:'),
+                      contentPadding: EdgeInsets.all(0),
+                      trailing: DropdownButton<String>(
+                        value: editSymptomOrConditionController.text,
+                        onChanged: (value) {
+                          setState(() {
+                            editSymptomOrConditionController.text = value!;
+                          });
+                        },
+                        items: ['Symptom', 'Condition'].map((type) {
+                          return DropdownMenuItem<String>(
+                            value: type,
+                            child: Text(type),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    Text('Herbal Alternatives:'),
                     Column(
-                      children: List.generate(herbalAlternativeNames.length, (index) {
-                        return Card(
-                          child: ListTile(
-                            title: Text(herbalAlternativeNames[index]),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('How to Use: ${howToUseList[index]}'),
-                                Text('Caution: ${cautionList[index]}'),
-                              ],
-                            ),
-                            trailing: IconButton(
-                              icon: Icon(Icons.delete),
-                              onPressed: () {
-                                herbalAlternativeNames.removeAt(index);
-                                howToUseList.removeAt(index);
-                                cautionList.removeAt(index);
-                                setState(() {});
+                      children: List.generate(plan.herbalAlternativeNames.length, (index) {
+                        return Column(
+                          children: [
+                            ListTile(
+                              title: Text(plan.herbalAlternativeNames[index]),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('How to Use: ${plan.howToUseList[index]}'),
+                                  Text('Caution: ${plan.cautionList[index]}'),
+                                ],
+                              ),
+                              onTap: () {
+                                // Set the selected index when a herbal alternative is tapped
+                                setState(() {
+                                  selectedHerbalAlternativeIndex = index;
+                                });
                               },
                             ),
-                          ),
+                            if (index == selectedHerbalAlternativeIndex)
+                              Column(
+                                children: [
+                                  TextField(
+                                    controller: herbalAlternativeNameControllers[index],
+                                    decoration: InputDecoration(labelText: 'Name'),
+                                  ),
+                                  TextField(
+                                    controller: howToUseControllers[index],
+                                    decoration: InputDecoration(labelText: 'How to Use'),
+                                  ),
+                                  TextField(
+                                    controller: cautionControllers[index],
+                                    decoration: InputDecoration(labelText: 'Caution'),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      final name = herbalAlternativeNameControllers[index].text;
+                                      final howToUse = howToUseControllers[index].text;
+                                      final caution = cautionControllers[index].text;
+
+                                      if (name.isNotEmpty && howToUse.isNotEmpty && caution.isNotEmpty) {
+                                        // Update the values in the plan
+                                        plan.herbalAlternativeNames[index] = name;
+                                        plan.howToUseList[index] = howToUse;
+                                        plan.cautionList[index] = caution;
+                                      }
+
+                                      setState(() {
+                                        selectedHerbalAlternativeIndex = -1; // Deselect after saving
+                                      });
+                                    },
+                                    child: Text('Save'),
+                                  ),
+                                ],
+                              ),
+                          ],
                         );
                       }),
                     ),
                   ],
                 ),
+              ),
+              actions: [
+                ElevatedButton(
+                  onPressed: () {
+                    final String name = editNameController.text;
+                    final String description = editDescriptionController.text;
+                    final String symptomOrCondition = editSymptomOrConditionController.text;
+
+                    if (['Symptom', 'Condition'].contains(symptomOrCondition) && name.isNotEmpty) {
+                      final updatedPlan = Plan(
+                        name,
+                        description,
+                        symptomOrCondition,
+                        plan.herbalAlternativeNames,
+                        plan.howToUseList,
+                        plan.cautionList,
+                      );
+
+                      updatedPlan.id = plan.id; // Preserve the ID
+                      _planBox.put(updatedPlan);
+                      _loadPlans(); // Reload plans after editing
+                      Navigator.pop(context);
+                    } else {
+                      // Handle the case where an invalid value is selected.
+                      // You can show an error message or inform the user.
+                      print('Invalid symptom or condition value or empty name.');
+                    }
+                  },
+                  child: Text('Save'),
+                ),
               ],
-            ),
-          ),
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                final String name = editNameController.text;
-                final String description = editDescriptionController.text;
-                final String symptomOrCondition = editSymptomOrConditionController.text;
-
-                if (['Symptom', 'Condition'].contains(symptomOrCondition) && name.isNotEmpty) {
-                  final updatedPlan = Plan(
-                    name,
-                    description,
-                    symptomOrCondition,
-                    herbalAlternativeNames,
-                    howToUseList,
-                    cautionList,
-                  );
-
-                  updatedPlan.id = plan.id; // Preserve the ID
-                  _planBox.put(updatedPlan);
-                  _loadPlans(); // Reload plans after editing
-                  Navigator.pop(context);
-                } else {
-                  // Handle the case where an invalid value is selected.
-                  // You can show an error message or inform the user.
-                  print('Invalid symptom or condition value or empty name.');
-                }
-              },
-              child: Text('Save'),
-            ),
-          ],
+            );
+          },
         );
       },
     );

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class LibraryScreen extends StatefulWidget {
+class RemedyScreen extends StatefulWidget {
   @override
-  _LibraryScreenState createState() => _LibraryScreenState();
+  _RemedyScreenState createState() => _RemedyScreenState();
 }
 
-class _LibraryScreenState extends State<LibraryScreen> {
+class _RemedyScreenState extends State<RemedyScreen> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build

@@ -231,7 +231,14 @@ class _PlanDetailPageState extends State<PlanDetailPage> {
           ],
         );
       case 'Caution':
-        return Text('Caution:\n${widget.plan.cautionList}');
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Display the list of cautions here
+            for (final caution in widget.plan.cautionList)
+              Text('Caution: $caution'),
+          ],
+        );
       case 'Reviews':
         return const Text('Functionality not yet implemented.');
       default:

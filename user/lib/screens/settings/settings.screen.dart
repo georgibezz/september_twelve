@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
-class LibraryScreen extends StatefulWidget {
+class SettingsScreen extends StatefulWidget {
   @override
-  _LibraryScreenState createState() => _LibraryScreenState();
+  _SettingsScreenState createState() => _SettingsScreenState();
 }
 
-class _LibraryScreenState extends State<LibraryScreen> {
+class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     throw UnimplementedError();
   }
+
 }
