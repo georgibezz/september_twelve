@@ -40,9 +40,9 @@ class _PlanScreenState extends State<PlanScreen> {
     showDialog(
       context: context,
       builder: (context) {
-        String newHerbalAlternativeName = '';
-        String newHerbalAlternativeHowToUse = '';
-        String newHerbalAlternativeCaution = '';
+        final TextEditingController herbalAlternativeNameController = TextEditingController();
+        final TextEditingController herbalAlternativeHowToUseController = TextEditingController();
+        final TextEditingController herbalAlternativeCautionController = TextEditingController();
 
         return AlertDialog(
           title: Text('Add Plan'),
@@ -79,106 +79,63 @@ class _PlanScreenState extends State<PlanScreen> {
                 SizedBox(height: 16),
                 Text('Herbal Alternatives:'),
                 Column(
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            controller: herbalAlternativeNameController,
-                            decoration: InputDecoration(labelText: 'Name'),
-                          ),
+                  children: List.generate(herbalAlternativeNames.length, (index) {
+                    return Card(
+                      child: ListTile(
+                        title: Text(herbalAlternativeNames[index]),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('How to Use: ${howToUseList[index]}'),
+                            Text('Caution: ${cautionList[index]}'),
+                          ],
                         ),
-                        IconButton(
-                          icon: Icon(Icons.add),
+                        trailing: IconButton(
+                          icon: Icon(Icons.delete),
                           onPressed: () {
-                            final name = herbalAlternativeNameController.text;
-                            final howToUse = howToUseController.text;
-                            final caution = cautionController.text;
-
-                            if (name.isNotEmpty) {
-                              herbalAlternativeNames.add(name);
-                              howToUseList.add(howToUse);
-                              cautionList.add(caution);
-
-                              herbalAlternativeNameController.clear();
-                              howToUseController.clear();
-                              cautionController.clear();
-
-                              setState(() {});
-                            }
+                            herbalAlternativeNames.removeAt(index);
+                            howToUseList.removeAt(index);
+                            cautionList.removeAt(index);
+                            setState(() {});
                           },
                         ),
-                      ],
-                    ),
-                    SizedBox(height: 8),
-                    Column(
-                      children: List.generate(herbalAlternativeNames.length, (index) {
-                        return Card(
-                          child: ListTile(
-                            title: Text(herbalAlternativeNames[index]),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('How to Use: ${howToUseList[index]}'),
-                                Text('Caution: ${cautionList[index]}'),
-                              ],
-                            ),
-                            trailing: IconButton(
-                              icon: Icon(Icons.delete),
-                              onPressed: () {
-                                herbalAlternativeNames.removeAt(index);
-                                howToUseList.removeAt(index);
-                                cautionList.removeAt(index);
-                                setState(() {});
-                              },
-                            ),
-                          ),
-                        );
-                      }),
-                    ),
-                    SizedBox(height: 16),
-                    Text('Add Herbal Alternative:'),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            onChanged: (value) {
-                              newHerbalAlternativeName = value;
-                            },
-                            decoration: InputDecoration(labelText: 'Name'),
-                          ),
-                        ),
-                        Expanded(
-                          child: TextField(
-                            onChanged: (value) {
-                              newHerbalAlternativeHowToUse = value;
-                            },
-                            decoration: InputDecoration(labelText: 'How to Use'),
-                          ),
-                        ),
-                        Expanded(
-                          child: TextField(
-                            onChanged: (value) {
-                              newHerbalAlternativeCaution = value;
-                            },
-                            decoration: InputDecoration(labelText: 'Caution'),
-                          ),
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.add),
-                          onPressed: () {
-                            if (newHerbalAlternativeName.isNotEmpty) {
-                              herbalAlternativeNames.add(newHerbalAlternativeName);
-                              howToUseList.add(newHerbalAlternativeHowToUse);
-                              cautionList.add(newHerbalAlternativeCaution);
+                      ),
+                    );
+                  }),
+                ),
+                SizedBox(height: 16),
+                Text('Add Herbal Alternative:'),
+                TextField(
+                  controller: herbalAlternativeNameController,
+                  decoration: InputDecoration(labelText: 'Name'),
+                ),
+                TextField(
+                  controller: herbalAlternativeHowToUseController,
+                  decoration: InputDecoration(labelText: 'How to Use'),
+                ),
+                TextField(
+                  controller: herbalAlternativeCautionController,
+                  decoration: InputDecoration(labelText: 'Caution'),
+                ),
+                IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: () {
+                    final name = herbalAlternativeNameController.text;
+                    final howToUse = herbalAlternativeHowToUseController.text;
+                    final caution = herbalAlternativeCautionController.text;
 
-                              setState(() {});
-                            }
-                          },
-                        ),
-                      ],
-                    ),
-                  ],
+                    if (name.isNotEmpty && howToUse.isNotEmpty && caution.isNotEmpty) {
+                      herbalAlternativeNames.add(name);
+                      howToUseList.add(howToUse);
+                      cautionList.add(caution);
+
+                      herbalAlternativeNameController.clear();
+                      herbalAlternativeHowToUseController.clear();
+                      herbalAlternativeCautionController.clear();
+
+                      setState(() {});
+                    }
+                  },
                 ),
               ],
             ),
