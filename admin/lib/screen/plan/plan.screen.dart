@@ -142,7 +142,7 @@ class _PlanScreenState extends State<PlanScreen> {
                 final String description = descriptionController.text;
                 final String symptomOrCondition = symptomOrConditionController.text;
 
-                if (name.isNotEmpty) {
+                if (['Symptom', 'Condition'].contains(symptomOrCondition) && name.isNotEmpty) {
                   final newPlan = Plan(
                     name,
                     description,
@@ -155,6 +155,10 @@ class _PlanScreenState extends State<PlanScreen> {
                   _planBox.put(newPlan);
                   _loadPlans(); // Reload plans after adding
                   Navigator.pop(context);
+                } else {
+                  // Handle the case where an invalid value is selected.
+                  // You can show an error message or inform the user.
+                  print('Invalid symptom or condition value or empty name.');
                 }
               },
               child: Text('Add'),
@@ -169,10 +173,6 @@ class _PlanScreenState extends State<PlanScreen> {
     final TextEditingController editNameController = TextEditingController(text: plan.name);
     final TextEditingController editDescriptionController = TextEditingController(text: plan.description);
     final TextEditingController editSymptomOrConditionController = TextEditingController(text: plan.symptomOrCondition);
-
-    final List<String> editHerbalAlternativeNames = List.from(plan.herbalAlternativeNames);
-    final List<String> editHowToUseList = List.from(plan.howToUseList);
-    final List<String> editCautionList = List.from(plan.cautionList);
 
     showDialog(
       context: context,
@@ -191,7 +191,86 @@ class _PlanScreenState extends State<PlanScreen> {
                   controller: editDescriptionController,
                   decoration: InputDecoration(labelText: 'Description'),
                 ),
-                // ... Rest of the editing fields and UI
+                ListTile(
+                  title: Text('Select Type:'),
+                  contentPadding: EdgeInsets.all(0),
+                  trailing: DropdownButton<String>(
+                    value: editSymptomOrConditionController.text,
+                    onChanged: (value) {
+                      setState(() {
+                        editSymptomOrConditionController.text = value!;
+                      });
+                    },
+                    items: ['Symptom', 'Condition'].map((type) {
+                      return DropdownMenuItem<String>(
+                        value: type,
+                        child: Text(type),
+                      );
+                    }).toList(),
+                  ),
+                ),
+                SizedBox(height: 16),
+                Text('Herbal Alternatives:'),
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: herbalAlternativeNameController,
+                            decoration: InputDecoration(labelText: 'Name'),
+                          ),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.add),
+                          onPressed: () {
+                            final name = herbalAlternativeNameController.text;
+                            final howToUse = howToUseController.text;
+                            final caution = cautionController.text;
+
+                            if (name.isNotEmpty) {
+                              herbalAlternativeNames.add(name);
+                              howToUseList.add(howToUse);
+                              cautionList.add(caution);
+
+                              herbalAlternativeNameController.clear();
+                              howToUseController.clear();
+                              cautionController.clear();
+
+                              setState(() {});
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 8),
+                    Column(
+                      children: List.generate(herbalAlternativeNames.length, (index) {
+                        return Card(
+                          child: ListTile(
+                            title: Text(herbalAlternativeNames[index]),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('How to Use: ${howToUseList[index]}'),
+                                Text('Caution: ${cautionList[index]}'),
+                              ],
+                            ),
+                            trailing: IconButton(
+                              icon: Icon(Icons.delete),
+                              onPressed: () {
+                                herbalAlternativeNames.removeAt(index);
+                                howToUseList.removeAt(index);
+                                cautionList.removeAt(index);
+                                setState(() {});
+                              },
+                            ),
+                          ),
+                        );
+                      }),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
@@ -202,20 +281,24 @@ class _PlanScreenState extends State<PlanScreen> {
                 final String description = editDescriptionController.text;
                 final String symptomOrCondition = editSymptomOrConditionController.text;
 
-                if (name.isNotEmpty) {
+                if (['Symptom', 'Condition'].contains(symptomOrCondition) && name.isNotEmpty) {
                   final updatedPlan = Plan(
                     name,
                     description,
                     symptomOrCondition,
-                    editHerbalAlternativeNames,
-                    editHowToUseList,
-                    editCautionList,
+                    herbalAlternativeNames,
+                    howToUseList,
+                    cautionList,
                   );
 
                   updatedPlan.id = plan.id; // Preserve the ID
                   _planBox.put(updatedPlan);
                   _loadPlans(); // Reload plans after editing
                   Navigator.pop(context);
+                } else {
+                  // Handle the case where an invalid value is selected.
+                  // You can show an error message or inform the user.
+                  print('Invalid symptom or condition value or empty name.');
                 }
               },
               child: Text('Save'),
@@ -224,13 +307,7 @@ class _PlanScreenState extends State<PlanScreen> {
         );
       },
     );
-
-    // Dispose of the controllers when the dialog is closed to avoid memory leaks
-    editNameController.dispose();
-    editDescriptionController.dispose();
-    editSymptomOrConditionController.dispose();
   }
-
 
   void _viewPlanDetails(Plan plan) {
     showDialog(
