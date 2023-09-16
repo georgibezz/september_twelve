@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:user/constants/app.routes.dart';
+import 'package:user/constants/constant.dart';
+import 'package:user/constants/size_config.dart';
 
 class HomeHeader extends StatelessWidget {
   const HomeHeader({
@@ -9,13 +11,14 @@ class HomeHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            'Your App Name', // Replace with your app name
+            'Wellness Database', // Replace with your app name
             style: TextStyle(
+              color: Colors.black,
               fontSize: 24,
               fontWeight: FontWeight.bold,
             ),

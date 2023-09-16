@@ -48,6 +48,9 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  get: ^4.3.4
+  google_fonts: ^2.1.0
+  animated_text_kit: ^4.2.2
   build_runner: ^2.4.6
   objectbox_generator: any
 # For information on the generic Dart part of this file, see the

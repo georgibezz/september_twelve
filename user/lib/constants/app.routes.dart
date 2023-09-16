@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:user/screens/home/home.page.dart';
 import 'package:user/screens/library/library.screen.dart';
-import 'package:user/screens/plan/plan.screen.dart';
+import 'package:user/screens/plan/plan.welcome.screen.dart';
 import 'package:user/screens/review/reviews.screen.dart';
 import 'package:user/screens/search/search.screen.dart';
 import 'package:user/screens/settings/settings.screen.dart';
@@ -20,6 +20,6 @@ final Map<String, WidgetBuilder> userAppRoutes = {
   remedyRoute: (context) => RemedyScreen(),
   searchRoute: (context) => SearchScreen(),
   reviewsRoute: (context) => ReviewsScreen(),
-  libraryRoute: (context) => LibraryScreen(),
+  libraryRoute: (context) => LibraryPage(),
   settingsRoute: (context) => SettingsScreen(),
 };
