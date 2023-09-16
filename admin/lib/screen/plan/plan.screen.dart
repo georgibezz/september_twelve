@@ -35,6 +35,8 @@ class _PlanScreenState extends State<PlanScreen> {
   }
 
   void _addPlan() {
+    String selectedType = 'Symptom'; // Set an initial value
+
     showDialog(
       context: context,
       builder: (context) {
@@ -56,10 +58,10 @@ class _PlanScreenState extends State<PlanScreen> {
                   title: Text('Select Type:'),
                   contentPadding: EdgeInsets.all(0),
                   trailing: DropdownButton<String>(
-                    value: symptomOrConditionController.text,
+                    value: selectedType, // Use the selectedType variable
                     onChanged: (value) {
                       setState(() {
-                        symptomOrConditionController.text = value!;
+                        selectedType = value!;
                       });
                     },
                     items: ['Symptom', 'Condition'].map((type) {
@@ -140,13 +142,12 @@ class _PlanScreenState extends State<PlanScreen> {
               onPressed: () {
                 final String name = nameController.text;
                 final String description = descriptionController.text;
-                final String symptomOrCondition = symptomOrConditionController.text;
 
-                if (['Symptom', 'Condition'].contains(symptomOrCondition) && name.isNotEmpty) {
+                if (selectedType.isNotEmpty && name.isNotEmpty) {
                   final newPlan = Plan(
                     name,
                     description,
-                    symptomOrCondition,
+                    selectedType, // Use the selected type
                     herbalAlternativeNames,
                     howToUseList,
                     cautionList,
@@ -156,9 +157,9 @@ class _PlanScreenState extends State<PlanScreen> {
                   _loadPlans(); // Reload plans after adding
                   Navigator.pop(context);
                 } else {
-                  // Handle the case where an invalid value is selected.
+                  // Handle the case where the type or name is empty.
                   // You can show an error message or inform the user.
-                  print('Invalid symptom or condition value or empty name.');
+                  print('Invalid type or empty name.');
                 }
               },
               child: Text('Add'),
