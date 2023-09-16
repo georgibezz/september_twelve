@@ -40,6 +40,10 @@ class _PlanScreenState extends State<PlanScreen> {
     showDialog(
       context: context,
       builder: (context) {
+        String newHerbalAlternativeName = '';
+        String newHerbalAlternativeHowToUse = '';
+        String newHerbalAlternativeCaution = '';
+
         return AlertDialog(
           title: Text('Add Plan'),
           content: SingleChildScrollView(
@@ -131,6 +135,48 @@ class _PlanScreenState extends State<PlanScreen> {
                           ),
                         );
                       }),
+                    ),
+                    SizedBox(height: 16),
+                    Text('Add Herbal Alternative:'),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            onChanged: (value) {
+                              newHerbalAlternativeName = value;
+                            },
+                            decoration: InputDecoration(labelText: 'Name'),
+                          ),
+                        ),
+                        Expanded(
+                          child: TextField(
+                            onChanged: (value) {
+                              newHerbalAlternativeHowToUse = value;
+                            },
+                            decoration: InputDecoration(labelText: 'How to Use'),
+                          ),
+                        ),
+                        Expanded(
+                          child: TextField(
+                            onChanged: (value) {
+                              newHerbalAlternativeCaution = value;
+                            },
+                            decoration: InputDecoration(labelText: 'Caution'),
+                          ),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.add),
+                          onPressed: () {
+                            if (newHerbalAlternativeName.isNotEmpty) {
+                              herbalAlternativeNames.add(newHerbalAlternativeName);
+                              howToUseList.add(newHerbalAlternativeHowToUse);
+                              cautionList.add(newHerbalAlternativeCaution);
+
+                              setState(() {});
+                            }
+                          },
+                        ),
+                      ],
                     ),
                   ],
                 ),
